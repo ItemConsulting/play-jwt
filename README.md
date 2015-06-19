@@ -33,7 +33,7 @@ public class DefaultModule extends AbstractModule {
 
 Initiating [JwtSecurity](src/main/java/no/item/play/security/JwtSecurity.java) by Injection
 
-Basic steps to create a claim:
+Basic steps to create a claim;
 1. Initiate the ClaimBuilder
 2. set Id
 3. set audience
