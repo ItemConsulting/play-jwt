@@ -4,6 +4,8 @@ package no.item.play.security;
 import no.item.play.security.verifiers.AdminVerifier;
 import no.item.play.security.verifiers.UserVerifier;
 import play.Play;
+import play.mvc.Http;
+
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
@@ -32,19 +34,16 @@ public class JwtSecurity implements Constants {
 
     public void removeToken() {
         response().discardCookie(TOKEN);
-        //change from session().remove(TOKEN);
     }
 
     public Map<String, Object> createToken(Claim claim){
         String token = signer.sign(claim);
         response().setCookie(TOKEN, token);
-        //session(TOKEN, token);
 
         return claim;
     }
 
     private Optional<String> token(){
-        //Changed from session.get(TOKEN)
-        return Optional.ofNullable(response().cookie(TOKEN).get().value());
+        return response().cookie(TOKEN).map(Http.Cookie::value);
     }
 }
