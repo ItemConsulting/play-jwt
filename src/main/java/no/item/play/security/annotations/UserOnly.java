@@ -17,11 +17,9 @@ public class UserOnly extends Security.Authenticator implements Http.Status, Con
 
     @Override
     public String getUsername(Http.Context context) {
-        return context.response().cookie(TOKEN)
-                .map(Http.Cookie::value)
-                .flatMap(this::verify)
-                .map(Claim::id)
-                .orElse(NO_USERNAME);
+            String token = context.request().cookie(TOKEN).value();
+
+            return verify(token).map(Claim::id).orElse(NO_USERNAME);
     }
 
     private Optional<Claim> verify(String token) {

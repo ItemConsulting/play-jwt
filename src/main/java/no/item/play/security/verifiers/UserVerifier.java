@@ -8,6 +8,9 @@ import play.Play;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import java.util.Map;
+import java.util.Optional;
+
 import static no.item.play.security.Audience.ADMIN;
 import static no.item.play.security.Audience.USER;
 
@@ -21,11 +24,18 @@ public class UserVerifier extends JWTVerifier implements Constants {
         super(secret, audience);
     }
 
-    public Boolean isValid(String token){
+
+    public Optional<Map<String, Object>> claim(String token){
         try {
-            return verify(token).containsKey(CLAIM_ID);
+            return Optional.of(verify(token));
         } catch (Exception e) {
-            return false;
+            return Optional.empty();
         }
+    }
+
+    public Boolean isValid(String token){
+        return claim(token)
+                .map(t -> t.containsKey(CLAIM_ID))
+                .orElse(Boolean.FALSE);
     }
 }

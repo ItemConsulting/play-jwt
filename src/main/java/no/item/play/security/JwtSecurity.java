@@ -43,6 +43,10 @@ public class JwtSecurity implements Constants {
         return claim;
     }
 
+    public Optional<Map<String, Object>> userClaim() {
+        return token().flatMap(userVerifier::claim);
+    }
+
     private Optional<String> token(){
         return response().cookie(TOKEN).map(Http.Cookie::value);
     }

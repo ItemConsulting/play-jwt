@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 import no.item.play.security.verifiers.UserVerifier;
 import org.fest.assertions.MapAssert;
 import org.junit.Test;
+import play.Configuration;
 import play.Logger;
 import play.libs.Json;
 
@@ -21,6 +22,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -114,5 +116,15 @@ public class JwtSignerTest {
         assertThat(verified).includes(entry("id", "2"), entry("mykey", "myvalue"),
                             entry("mykey2", "myvalue2"), entry("aud", audience));
 
+    }
+
+    @Test
+    public void testWithCustomToken() {
+        Signer signer = new Signer("c2NdtGcG26ffushDq1JauqXs<khtJG]lAbwbWl89?7AXu/;If<0Y7kG^lg4L]raY");
+        UserVerifier sVerifier = new UserVerifier("c2NdtGcG26ffushDq1JauqXs<khtJG]lAbwbWl89?7AXu/;If<0Y7kG^lg4L]raY");
+
+        Map<String, Object> claim = sVerifier.claim("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOlsidXNlciJdLCJ1c3IiOiJzYm9paiIsInBzd3JkIjoianVuMjAxNSIsIm5hbWUiOiJTaW1vbiBCb2lqIiwiaWQiOiIzQjU2M0YzRC1CN0ZFLTNERTQtQzEyNS03RTVFMDAzRTIxMjgiLCJlbWFpbCI6InNpbW9uLmJvaWpAaXRlbS5ubyJ9.wmwI5AewPIGGKacvI_Z_wWduxDKKNjInS63T8Rkwf84").orElse(new HashMap<>());
+        Logger.info(Json.toJson(claim).toString());
+        assertThat(claim).isNotEmpty().isNotNull();
     }
 }
