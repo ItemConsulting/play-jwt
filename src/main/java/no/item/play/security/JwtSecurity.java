@@ -3,15 +3,11 @@ package no.item.play.security;
 
 import no.item.play.security.verifiers.AdminVerifier;
 import no.item.play.security.verifiers.UserVerifier;
-import play.Play;
-import play.mvc.Http;
-
 import javax.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
-
+import static play.mvc.Controller.request;
 import static play.mvc.Controller.response;
-import static play.mvc.Controller.session;
 
 public class JwtSecurity implements Constants {
     private final Signer signer;
@@ -48,6 +44,6 @@ public class JwtSecurity implements Constants {
     }
 
     private Optional<String> token(){
-        return response().cookie(TOKEN).map(Http.Cookie::value);
+        return Optional.of(request().cookie(TOKEN).value());
     }
 }
