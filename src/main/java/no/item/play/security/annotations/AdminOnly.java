@@ -25,11 +25,9 @@ public class AdminOnly extends Security.Authenticator implements Http.Status, Co
 
     @Override
     public String getUsername(Http.Context context) {
-        return context.response().cookie(TOKEN)
-                .map(Http.Cookie::value)
-                .flatMap(this::verify)
-                .map(Claim::id)
-                .orElse(NO_USERNAME);
+        String token = context.request().cookie(TOKEN).value();
+
+        return verify(token).map(Claim::id).orElse(NO_USERNAME);
     }
 
     @Override
